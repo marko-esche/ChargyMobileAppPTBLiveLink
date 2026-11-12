@@ -40,6 +40,7 @@ import { bundledTrustedPublicKeys } from './bundledTrustedPublicKeys';
 import { downloadTrustAnchorData, parseTrustAnchorData, validateTrustAnchorData, validateHistoricalReferenceData, type LoadedTrustAnchorData, type StoredTrustAnchorData } from './trustAnchorData';
 import { renderTrustAnchorData } from './trustAnchorDataView';
 import { allowInsecureTransports, allowPrivateNetworkTransports } from './buildFlags';
+import { getPtbLiveLink } from './ptbLiveLink';
 const transportAllowances = { insecureTransports: allowInsecureTransports, privateNetworkTransports: allowPrivateNetworkTransports };
 installUint8ArrayToHexPolyfill();
 
@@ -384,6 +385,25 @@ export default class App {
             {
                 pasteButton.disabled = false;
                 pasteButton.setAttribute('aria-busy', 'false');
+            }
+        };
+
+        const ptbLiveButton                 = <HTMLButtonElement> document.getElementById('ptbLiveButton');
+        ptbLiveButton.onclick             = async () => {
+            if (ptbLiveButton.disabled)
+                return;
+
+            ptbLiveButton.disabled = true;
+            ptbLiveButton.setAttribute('aria-busy', 'true');
+
+            try
+            {
+                await this.PtbLiveLogin();
+            }
+            finally
+            {
+                ptbLiveButton.disabled = false;
+                ptbLiveButton.setAttribute('aria-busy', 'false');
             }
         };
 
@@ -1548,6 +1568,30 @@ export default class App {
     }
     catch(exception) {
       this.doGlobalError(this.t('clipboardReadFailed'), exception);
+    }
+
+  }
+
+/**
+ * alternative function for obtaining a live link
+ */
+
+  async PtbLiveLogin(): Promise<void> {
+
+    this.importantInfo.style.display  = 'none';
+    this.importantInfo.innerHTML      = '';
+
+    try {
+
+      const content = await getPtbLiveLink("https://steve.ptb.de/steve/api/v1/metrology/getLiveLink");
+
+      console.log(content);
+      if ((content != null))
+        await this._chargyApp.detectContentFormat(content);
+
+    }
+    catch(exception) {
+      this.doGlobalError(this.t('ptbLiveReadFailed'), exception);
     }
 
   }
