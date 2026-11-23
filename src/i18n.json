@@ -465,9 +465,21 @@
         "de": "Der Transparenzdatensatz konnte nicht aus der Zwischenablage gelesen werden.",
         "en": "The transparency record could not be read from the clipboard."
     },
+    "ptbLiveReadFailed": {
+        "de": "Der PTB-Livelink konnte nicht abgerufen werden.",
+        "en": "The PTB livelink could not be obtained."
+    },
     "recordLabel": {
         "de": "Datensatz",
         "en": "Record"
+    },
+    "ptbLabel": {
+        "de": "PTB",
+        "en": "PTB"
+    },
+    "loginLabel": {
+        "de": "Livedaten anzeigen",
+        "en": "show live data"
     },
     "bufferLabel": {
         "de": "Puffer",
